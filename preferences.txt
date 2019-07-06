@@ -1,0 +1,22 @@
+{
+  "exchanges": {
+    "Binance": {
+      "api_key": "PPL5cAjZ7oalDyeeQGiogqx3DwgOyRldHyiPG0JdHe3c8eytiYuR51WYmlTU2waV",
+      "secret_key": "9TDaiTrZfIlEMwgI1gdksRmJn0YjT69KB9Y4DSyzMJfxAExzNLMyY5RG3d90rbR4",
+      "trading_fee": 0.1
+    },
+    "Bibox": {
+      "api_key": "7782180f5ce31414a531c4312e9ab75e279ba157",
+      "secret_key": "aa0b207e361d565f3e37e0e67c43f573d70c33b8",
+      "trading_fee": 0.1
+    }
+  },
+  "symbols": [
+    "ETH_BTC",
+    "ETH_USDT",
+    "BTC_USDT"
+  ],
+  "ex_pairs": [
+    "Binance_Bibox"
+  ]
+}
