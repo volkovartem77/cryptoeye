@@ -1,8 +1,9 @@
 import json
+import time
 import traceback
 from collections import Counter
 
-from config import DATABASE, EXCHANGE_PAIRS, SYMBOLS
+from config import DATABASE, EXCHANGE_PAIRS, SYMBOLS, MIN_PROFIT, EXCHANGES
 from utils_log import err_log, excel_diff_log
 
 
@@ -25,6 +26,12 @@ def init_count():
     for ex_pair in EXCHANGE_PAIRS:
         for symbol in SYMBOLS:
             set_count(ex_pair, symbol, {})
+
+
+def init_points():
+    for ex_pair in EXCHANGE_PAIRS:
+        for symbol in SYMBOLS:
+            set_points(ex_pair, symbol, [])
 
 
 def get_count(ex_pair, symbol):
@@ -54,6 +61,42 @@ def update_count(ex_pair, symbol, value):
         err_log(traceback.format_exc(), symbol)
 
 
+def get_points(ex_pair, symbol):
+    try:
+        points = DATABASE.get(ex_pair + ':' + symbol + 'POINTS')
+        return json.loads(points) if points is not None else points
+    except TypeError:
+        err_log(traceback.format_exc(), ex_pair + ':' + symbol)
+
+
+def set_points(ex_pair, symbol, points):
+    try:
+        DATABASE.set(ex_pair + ':' + symbol + 'POINTS', json.dumps(points))
+    except TypeError:
+        err_log(traceback.format_exc(), symbol)
+
+
+def update_points(ex_pair, symbol, point):
+    try:
+        points = get_points(ex_pair, symbol)
+        points.append(point)
+        set_points(ex_pair, symbol, points)
+    except TypeError:
+        err_log(traceback.format_exc(), symbol)
+
+
+def add_point(exchangeA, exchangeB, symbol, point):
+    points = get_points(exchangeA + '_' + exchangeB, symbol)
+    if points is None or not points:
+        update_points(exchangeA + '_' + exchangeB, symbol, point)
+    else:
+        last_diffA = points[-1][0]
+        last_diffB = points[-1][1]
+        if point[0] != last_diffA or point[1] != last_diffB:
+            print(exchangeA + '_' + exchangeB, symbol, point)
+            update_points(exchangeA + '_' + exchangeB, symbol, point)
+
+
 def calc_diff(exchangeA, exchangeB, symbol):
     tickA = get_tick(exchangeA, symbol)
     tickB = get_tick(exchangeB, symbol)
@@ -61,6 +104,11 @@ def calc_diff(exchangeA, exchangeB, symbol):
     max_bid = max(float(tickA['bid']), float(tickB['bid']))
     diff = round((max_bid / min_ask * 100) - 100, 2)
     update_count(f'{exchangeA}_{exchangeB}', symbol, diff)
+
+    # opposite diff
+    diffA = round((float(tickA['bid']) / float(tickB['ask']) * 100) - 100, 1)
+    diffB = round((float(tickB['bid']) / float(tickA['ask']) * 100) - 100, 1)
+    # add_point(exchangeA, exchangeB, symbol, [diffA, diffB, int(time.time() * 1000)])
     return diff
 
 
@@ -105,3 +153,14 @@ def make_stats_diff():
 #     for symbol in SYMBOLS:
 #         diffs = get_count(ex_pair, symbol)
 #         print(diffs)
+
+# init_points()
+# print(get_points("Binance_Bibox", 'ETH_BTC'))
+# add_point("Binance", "Bibox", 'ETH_BTC', [-0.21, -0.19, 1562418112958])
+# print(get_points("Binance_Bibox", 'ETH_BTC'))
+# add_point("Binance", "Bibox", 'ETH_BTC', [-0.28, -0.05, 1562418113254])
+# print(get_points("Binance_Bibox", 'ETH_BTC'))
+# add_point("Binance", "Bibox", 'ETH_BTC', [-0.28, -0.05, 1562418113254])
+# print(get_points("Binance_Bibox", 'ETH_BTC'))
+# add_point("Binance_Bibox", 'ETH_BTC', [-0.12, -0.2, 1562418113263])
+# print(get_points("Binance_Bibox", 'ETH_BTC'))

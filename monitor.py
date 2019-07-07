@@ -5,7 +5,7 @@ from statistics import mean
 
 from config import TICK_EXPIRATION_TIME, SYMBOLS, EXCHANGES, MIN_PROFIT, EXCHANGE_PAIRS, STATS_DIFF_TIMEOUT, \
     MONITORING_ACCURACY
-from utils_cache import get_tick, calc_diff, init_count, make_stats_diff
+from utils_cache import get_tick, calc_diff, init_count, make_stats_diff, init_points
 from utils_log import log, excel_log
 
 
@@ -48,7 +48,7 @@ def launch(ex_pair, symbol):
 
     feeA = EXCHANGES[exchangeA]['trading_fee']
     feeB = EXCHANGES[exchangeB]['trading_fee']
-    min_diff = (feeA + feeB) * 2 + MIN_PROFIT
+    min_diff = round((feeA + feeB) * 2 + MIN_PROFIT, 2)
 
     spikes = []
     max_spike = 0
@@ -98,6 +98,7 @@ if __name__ == '__main__':
     try:
         # monitor
         init_count()
+        init_points()
         for pair in EXCHANGE_PAIRS:
             for s in SYMBOLS:
                 th = threading.Thread(target=launch_thread, kwargs={"ex_pair": pair, "symbol": s})
