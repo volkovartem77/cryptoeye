@@ -100,14 +100,10 @@ def add_point(exchangeA, exchangeB, symbol, point):
 def calc_diff(exchangeA, exchangeB, symbol):
     tickA = get_tick(exchangeA, symbol)
     tickB = get_tick(exchangeB, symbol)
-    min_ask = min(float(tickA['ask']), float(tickB['ask']))
-    max_bid = max(float(tickA['bid']), float(tickB['bid']))
-    diff = round((max_bid / min_ask * 100) - 100, 2)
-    update_count(f'{exchangeA}_{exchangeB}', symbol, diff)
-
-    # opposite diff
     diffA = round((float(tickA['bid']) / float(tickB['ask']) * 100) - 100, 1)
     diffB = round((float(tickB['bid']) / float(tickA['ask']) * 100) - 100, 1)
+    diff = max(diffA, diffB)
+    update_count(f'{exchangeA}_{exchangeB}', symbol, diff)
     # add_point(exchangeA, exchangeB, symbol, [diffA, diffB, int(time.time() * 1000)])
     return diff
 
@@ -118,10 +114,6 @@ def make_stats_diff():
         for symbol in SYMBOLS:
             diffs = get_count(ex_pair, symbol)
             if diffs:
-                if '-0.0' in diffs:
-                    n = diffs['-0.0']
-                    diffs.pop('-0.0')
-                    diffs.update({'0.0': n})
                 data.update({ex_pair + ':' + symbol: diffs})
     if data:
         excel_diff_log(data)

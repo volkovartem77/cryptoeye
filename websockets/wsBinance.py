@@ -28,7 +28,7 @@ def on_message(ws, message):
 
 
 def on_error(ws, error):
-    print(error)
+    log(f'ws{NAME}: {error}')
 
 
 def on_close(ws):

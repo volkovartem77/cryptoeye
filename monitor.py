@@ -52,7 +52,6 @@ def launch(ex_pair, symbol):
 
     spikes = []
     max_spike = 0
-    min_spike = 0
 
     while True:
         time.sleep(MONITORING_ACCURACY)
@@ -69,20 +68,6 @@ def launch(ex_pair, symbol):
                     spikes.append(max_spike)
                     # stats(ex_pair, symbol, spikes)
                     max_spike = 0
-                    break
-
-        if diff < -min_diff and diff < min_spike:
-            min_spike = diff
-            while True:
-                time.sleep(MONITORING_ACCURACY)
-                diff = calc_diff(exchangeA, exchangeB, symbol)
-                if diff < -min_diff and diff < min_spike:
-                    min_spike = diff
-                    log(ex_pair + ' ' + symbol + ' ' + str(diff))
-                if diff >= 0:
-                    spikes.append(min_spike)
-                    # stats(ex_pair, symbol, spikes)
-                    min_spike = 0
                     break
 
 

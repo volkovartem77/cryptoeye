@@ -117,5 +117,6 @@ dmypy.json
 
 # My tests
 test.py
-trades.csv
-crystal3.conf
+stats_diff.csv
+cryptoeye.conf
+stats.csv
