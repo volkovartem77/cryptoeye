@@ -25,7 +25,7 @@ def stats(ex_pair, symbol, spikes):
         "Mean extremum": str(mean_extremum),
         "Frequency": str(len(spikes))
     })
-    print(ex_pair, symbol, str(mean_extremum), str(len(spikes)), spikes)
+    # print(ex_pair, symbol, str(mean_extremum), str(len(spikes)), spikes)
 
 
 def check_timestamp(data):
@@ -66,7 +66,7 @@ def launch(ex_pair, symbol):
                     log(ex_pair + ' ' + symbol + ' ' + str(diff))
                 if diff <= 0:
                     spikes.append(max_spike)
-                    # stats(ex_pair, symbol, spikes)
+                    stats(ex_pair, symbol, spikes)
                     max_spike = 0
                     break
 

@@ -1,6 +1,8 @@
 import os
 import subprocess
 
+from config import BOT_PREFIX
+
 PROJECT_PATH = os.path.abspath(os.curdir) + '/'
 PROJECT_FOLDER = PROJECT_PATH.split('/')[-2]
 CONF_PATH = PROJECT_PATH + PROJECT_FOLDER + '.conf'
@@ -11,7 +13,7 @@ text = ''
 programs = ['websockets/wsBibox', 'websockets/wsBinance', 'monitor']
 for program_path in programs:
     block = f'''
-[program:{program_path.split('/')[-1]}]
+[program:{BOT_PREFIX + program_path.split('/')[-1]}]
 command={PROJECT_PATH}venv/bin/python {PROJECT_PATH}{program_path}.py
 stdout_logfile=/var/log/{PROJECT_FOLDER}/{program_path.replace('calculator/rel/', '')}.log
 stderr_logfile=/var/log/{PROJECT_FOLDER}/{program_path.replace('calculator/rel/', '')}_ERR.log

@@ -5,6 +5,7 @@ import redis
 PROJECT_PATH = '/home/kusko/PyProjects/CryptoEye/'
 PROJECT_FOLDER = PROJECT_PATH.split('/')[-2]
 CONF_PATH = PROJECT_PATH + PROJECT_FOLDER + '.conf'
+BOT_PREFIX = 'e'
 
 
 def get_preferences():

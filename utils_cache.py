@@ -3,13 +3,13 @@ import time
 import traceback
 from collections import Counter
 
-from config import DATABASE, EXCHANGE_PAIRS, SYMBOLS, MIN_PROFIT, EXCHANGES
+from config import DATABASE, EXCHANGE_PAIRS, SYMBOLS, MIN_PROFIT, EXCHANGES, BOT_PREFIX
 from utils_log import err_log, excel_diff_log
 
 
 def get_tick(exchange, symbol):
     try:
-        tick = DATABASE.get(exchange + ':' + symbol)
+        tick = DATABASE.get(exchange + ':' + symbol + BOT_PREFIX)
         return json.loads(json.loads(tick)) if tick is not None else tick
     except TypeError:
         err_log(traceback.format_exc(), exchange + ':' + symbol)
@@ -17,7 +17,7 @@ def get_tick(exchange, symbol):
 
 def set_tick(exchange, symbol, data):
     try:
-        DATABASE.set(exchange + ':' + symbol, json.dumps(data))
+        DATABASE.set(exchange + ':' + symbol + BOT_PREFIX, json.dumps(data))
     except TypeError:
         err_log(traceback.format_exc(), symbol)
 
@@ -36,7 +36,7 @@ def init_points():
 
 def get_count(ex_pair, symbol):
     try:
-        count = DATABASE.get(ex_pair + ':' + symbol)
+        count = DATABASE.get(ex_pair + ':' + symbol + BOT_PREFIX)
         return json.loads(count) if count is not None else count
     except TypeError:
         err_log(traceback.format_exc(), ex_pair + ':' + symbol)
@@ -44,7 +44,7 @@ def get_count(ex_pair, symbol):
 
 def set_count(ex_pair, symbol, values):
     try:
-        DATABASE.set(ex_pair + ':' + symbol, json.dumps(values))
+        DATABASE.set(ex_pair + ':' + symbol + BOT_PREFIX, json.dumps(values))
     except TypeError:
         err_log(traceback.format_exc(), symbol)
 
