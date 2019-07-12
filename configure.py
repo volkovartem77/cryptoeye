@@ -1,8 +1,6 @@
 import os
 import subprocess
 
-from config import BOT_PREFIX
-
 PROJECT_PATH = os.path.abspath(os.curdir) + '/'
 PROJECT_FOLDER = PROJECT_PATH.split('/')[-2]
 CONF_PATH = PROJECT_PATH + PROJECT_FOLDER + '.conf'
@@ -10,10 +8,10 @@ CONF_PATH = PROJECT_PATH + PROJECT_FOLDER + '.conf'
 
 f = open(CONF_PATH, "w")
 text = ''
-programs = ['websockets/wsBibox', 'websockets/wsBinance', 'monitor']
+programs = ['websockets/wsBibox', 'websockets/wsBinance', 'websockets/wsBitmart', 'monitor']
 for program_path in programs:
     block = f'''
-[program:{BOT_PREFIX + program_path.split('/')[-1]}]
+[program:{'e' + program_path.split('/')[-1]}]
 command={PROJECT_PATH}venv/bin/python {PROJECT_PATH}{program_path}.py
 stdout_logfile=/var/log/{PROJECT_FOLDER}/{program_path.replace('calculator/rel/', '')}.log
 stderr_logfile=/var/log/{PROJECT_FOLDER}/{program_path.replace('calculator/rel/', '')}_ERR.log
@@ -32,7 +30,7 @@ numprocs=1
 f.write(text)
 f.close()
 
-files = ['websockets/wsBibox.py', 'websockets/wsBinance.py']
+files = ['websockets/wsBibox.py', 'websockets/wsBinance.py', 'websockets/wsBitmart.py']
 
 for f in files:
     subprocess.call([f'''sed -i "s%# import sys%import sys%g" "{PROJECT_PATH}{f}"'''], shell=True)
