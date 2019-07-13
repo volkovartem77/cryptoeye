@@ -3,8 +3,7 @@ import threading
 import time
 from statistics import mean
 
-from config import TICK_EXPIRATION_TIME, SYMBOLS, EXCHANGES, MIN_PROFIT, EXCHANGE_PAIRS, STATS_DIFF_TIMEOUT, \
-    MONITORING_ACCURACY
+from config import TICK_EXPIRATION_TIME, SYMBOLS, EXCHANGES, MIN_PROFIT, EXCHANGE_PAIRS, STATS_DIFF_TIMEOUT
 from utils_cache import get_tick, calc_diff, init_count, make_stats_diff, init_points
 from utils_log import log, excel_log
 
@@ -54,12 +53,10 @@ def launch(ex_pair, symbol):
     max_spike = 0
 
     while True:
-        time.sleep(MONITORING_ACCURACY)
         diff = calc_diff(exchangeA, exchangeB, symbol)
         if diff > min_diff and diff > max_spike:
             max_spike = diff
             while True:
-                time.sleep(MONITORING_ACCURACY)
                 diff = calc_diff(exchangeA, exchangeB, symbol)
                 if diff > min_diff and diff > max_spike:
                     max_spike = diff

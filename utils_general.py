@@ -1,9 +1,6 @@
 import datetime
-import json
 import math
 import traceback
-
-import requests
 
 from config import SYMBOLS
 from utils_log import err_log
@@ -28,10 +25,8 @@ def date_ts(timestamp=0):
     return datetime.datetime.fromtimestamp(timestamp / 1000).strftime('%Y-%m-%d %H:%M:%S')
 
 
-def format_binance_symbol(symbol):
+def format_binance_symbol(symbol, symbols_info):
     try:
-        response = requests.get('https://api.binance.com/api/v1/exchangeInfo')
-        symbols_info = json.loads(response.text)['symbols']
         for symbol_info in symbols_info:
             if symbol_info['symbol'] == symbol:
                 return symbol_info['baseAsset'] + '_' + symbol_info['quoteAsset']

@@ -2,13 +2,15 @@
 # sys.path.append(PROJECT_PATH)
 import json
 import time
+import traceback
 
+import requests
 import websocket
 
 from config import SYMBOLS
 from utils_cache import set_tick
 from utils_general import format_binance_symbol
-from utils_log import log
+from utils_log import err_log, log
 
 NAME = 'Binance'
 
@@ -18,7 +20,7 @@ def on_message(ws, message):
 
     if 'ticker' in json.loads(message)['stream']:
         data = json.loads(message)['data']
-        symbol = format_binance_symbol(data['s'])
+        symbol = format_binance_symbol(data['s'], symbols_info)
         set_tick(NAME, symbol, json.dumps({
             'bid': data['b'],
             'ask': data['a'],
@@ -39,12 +41,14 @@ def on_open(ws):
     print('### opened ###')
 
     for symbol in SYMBOLS:
-        log(f'{NAME} subscribe {symbol}')
+        log(f'ws{NAME} subscribe {symbol}')
 
 
 if __name__ == "__main__":
     try:
         while True:
+            response = requests.get('https://api.binance.com/api/v1/exchangeInfo')
+            symbols_info = json.loads(response.text)['symbols']
             log(f'ws{NAME}: start')
 
             subs = '/'.join(list(s.replace('_', '').lower() + '@ticker' for s in SYMBOLS))
@@ -62,3 +66,5 @@ if __name__ == "__main__":
             time.sleep(1)
     except KeyboardInterrupt:
         exit()
+    except:
+        err_log(traceback.format_exc())
