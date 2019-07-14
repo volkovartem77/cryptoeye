@@ -11,21 +11,29 @@ from utils_cache import set_tick
 from utils_general import format_symbol
 from utils_log import err_log, log
 
-NAME = 'Binance'
+NAME = 'Hitbtc'
 
 
 def on_message(ws, message):
     # print(message)
+    message = json.loads(message)
 
-    if 'ticker' in json.loads(message)['stream']:
-        data = json.loads(message)['data']
-        symbol = format_symbol(data['s'])
-        set_tick(NAME, symbol, json.dumps({
-            'bid': data['b'],
-            'ask': data['a'],
-            'timestamp': int(time.time() * 1000)
-        }))
-        # print(NAME, symbol, json.dumps(data))
+    if 'method' in message:
+        if message['method'] == 'ticker':
+            data = message['params']
+            symbol = format_symbol(data['symbol'].replace('USD', 'USDT'))
+            set_tick(NAME, symbol, json.dumps({
+                'bid': data['bid'],
+                'ask': data['ask'],
+                'timestamp': int(time.time() * 1000)
+            }))
+            # print(NAME, symbol, json.dumps(data))
+            # if symbol == 'LTC_BTC':
+            #     print(json.dumps({
+            #         'bid': data['bid'],
+            #         'ask': data['ask'],
+            #         'timestamp': int(time.time() * 1000)
+            #     }))
 
 
 def on_error(ws, error):
@@ -40,6 +48,13 @@ def on_open(ws):
     print('### opened ###')
 
     for symbol in SYMBOLS:
+        ws.send(json.dumps({
+            "method": "subscribeTicker",
+            "params": {
+                "symbol": symbol.replace('_', '').replace('USDT', 'USD'),
+                "id": 123
+            }
+        }))
         log(f'ws{NAME} subscribe {symbol}')
 
 
@@ -48,10 +63,8 @@ if __name__ == "__main__":
         while True:
             log(f'ws{NAME}: start')
 
-            subs = '/'.join(list(s.replace('_', '').lower() + '@ticker' for s in SYMBOLS))
-
             ws = websocket.WebSocketApp(
-                f"wss://stream.binance.com:9443/stream?streams={subs}",
+                "wss://api.hitbtc.com/api/2/ws",
                 on_open=on_open,
                 on_message=on_message,
                 on_error=on_error,

@@ -1,9 +1,7 @@
 import json
-import time
 import traceback
-from collections import Counter
 
-from config import DATABASE, EXCHANGE_PAIRS, SYMBOLS, MIN_PROFIT, EXCHANGES, BOT_PREFIX
+from config import DATABASE, EXCHANGE_PAIRS, SYMBOLS, BOT_PREFIX
 from utils_log import err_log, excel_diff_log
 
 
@@ -93,7 +91,7 @@ def add_point(exchangeA, exchangeB, symbol, point):
         last_diffA = points[-1][0]
         last_diffB = points[-1][1]
         if point[0] != last_diffA or point[1] != last_diffB:
-            print(exchangeA + '_' + exchangeB, symbol, point)
+            # print(exchangeA + '_' + exchangeB, symbol, point)
             update_points(exchangeA + '_' + exchangeB, symbol, point)
 
 

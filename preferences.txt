@@ -15,6 +15,27 @@
       "secret_key": "4050ad00b2ff91f9227482cddbe0267e",
       "api_name": "arbitrage",
       "trading_fee": 0.2
+    },
+    "Okex": {
+      "api_key": "41b1c2d5-9490-4615-8261-8638b99690f4",
+      "secret_key": "56C05BC5C5704A3FAD15474DE1488482",
+      "pass_phrase": "q1w2e3r4t5",
+      "trading_fee": 0.15
+    },
+    "Huobi": {
+      "api_key": "6eafb20e-10d9ebd7-bgbfh5tv3f-a1db2",
+      "secret_key": "3a287fff-03c5fa06-72ffb14a-d67a7",
+      "trading_fee": 0.2
+    },
+    "Hitbtc": {
+      "api_key": "lvaERFVrKfcoa9XmkDkMSUBO6y7RgKKI",
+      "secret_key": "1cnquEi4+QrvjgW1cevz9IYXpdjOOjYw",
+      "trading_fee": 0.2
+    },
+    "Bittrex": {
+      "api_key": "102a0708be154fdfb1d26002d0a81cbe",
+      "secret_key": "0d1af6f809e5423faf6dc6433218d565",
+      "trading_fee": 0.25
     }
   },
   "symbols": [
@@ -22,12 +43,29 @@
     "ETH_USDT",
     "BTC_USDT",
     "LTC_BTC",
-    "LTC_USDT",
-    "LTC_ETH"
+    "LTC_USDT"
   ],
   "ex_pairs": [
     "Binance_Bibox",
     "Binance_Bitmart",
-    "Bibox_Bitmart"
+    "Binance_Okex",
+    "Binance_Huobi",
+    "Binance_Hitbtc",
+    "Binance_Bittrex",
+    "Bibox_Bitmart",
+    "Bibox_Okex",
+    "Bibox_Huobi",
+    "Bibox_Hitbtc",
+    "Bibox_Bittrex",
+    "Bitmart_Okex",
+    "Bitmart_Huobi",
+    "Bitmart_Hitbtc",
+    "Bitmart_Bittrex",
+    "Okex_Huobi",
+    "Okex_Hitbtc",
+    "Okex_Bittrex",
+    "Huobi_Hitbtc",
+    "Huobi_Bittrex",
+    "Hitbtc_Bittrex"
   ]
 }

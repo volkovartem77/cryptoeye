@@ -25,10 +25,19 @@ def date_ts(timestamp=0):
     return datetime.datetime.fromtimestamp(timestamp / 1000).strftime('%Y-%m-%d %H:%M:%S')
 
 
-def format_binance_symbol(symbol, symbols_info):
+def format_symbol(symbol):
     try:
-        for symbol_info in symbols_info:
-            if symbol_info['symbol'] == symbol:
-                return symbol_info['baseAsset'] + '_' + symbol_info['quoteAsset']
+        symbol = symbol.replace('-', '').replace('/', '').replace('_', '').upper()
+        for s in SYMBOLS:
+            if symbol == s.replace('_', ''):
+                return s
     except (TypeError, KeyError):
         err_log(traceback.format_exc(), symbol)
+
+
+# print(format_symbol('ETHBTC'))
+# print(format_symbol('ETH-BTC'))
+# print(format_symbol('ETH/BTC'))
+# print(format_symbol('ETH_BTC'))
+# print(format_symbol('eth_btc'))
+# print(format_symbol('ethbtc'))
